@@ -4,6 +4,7 @@ import React from 'react';
 function TopBanner() {
   return (
     <div>
+      <br></br>
       <div className="row">
         <div className="col align-self-center text-start">
           <h1>This website is home to Joel Hilton's Movie Collection.</h1>

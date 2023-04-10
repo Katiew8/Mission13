@@ -1,57 +1,53 @@
-import { useState } from 'react';
-import data from './MovieData.json';
+import { useEffect, useState } from 'react';
+import { Movies } from './types/Movies';
 import React from 'react';
-import styles from './My.module.css';
 
-const mds = data.MovieDataList;
-
-function MovieList() {
-  const [listOfMovies, setListOfMovies] = useState(mds);
-
-  const addMovie = () => {
-    setListOfMovies([
-      ...mds,
-      {
-        MovieId: 383,
-        Category: 'Action/Adventure',
-        Title: 'Gladiator',
-        Year: 2000,
-        Director: 'Ridley Scott',
-        Rating: 'R',
-      },
-    ]);
-  };
-
+function Movies() {
+  const [movieData, setMovieData] = useState<Movies[]>([]);
+  useEffect(() => {
+    const fetchMovie = async () => {
+      const rsp = await fetch('https://localhost:4000/movie');
+      const temp = await rsp.json();
+      setMovieData(temp);
+    };
+    fetchMovie();
+  }, []);
   return (
     <>
+      <br></br>
       <div className="text-center">
-        <br></br>
         <h1>Joel Hilton's Movie Collection</h1>
-        <br></br>
       </div>
+      <br></br>
       <div className="row">
         <div className="col-2"></div>
         <div className="col-8">
           <table className="table">
             <thead>
               <tr>
+                <th>Movie ID</th>
+                <th>Category</th>
                 <th>Title</th>
                 <th>Year</th>
                 <th>Director</th>
                 <th>Rating</th>
-                <th>Category</th>
                 <th>Edited</th>
+                <th>Lent To</th>
+                <th>Notes</th>
               </tr>
             </thead>
             <tbody>
-              {listOfMovies.map((m) => (
-                <tr key={m.MovieId}>
+              {movieData.map((m) => (
+                <tr>
+                  <td>{m.MovieID}</td>
+                  <td>{m.Category}</td>
                   <td>{m.Title}</td>
                   <td>{m.Year}</td>
                   <td>{m.Director}</td>
                   <td>{m.Rating}</td>
-                  <td>{m.Category}</td>
                   <td>{m.Edited}</td>
+                  <td>{m.LentTo}</td>
+                  <td>{m.Notes}</td>
                 </tr>
               ))}
             </tbody>
@@ -59,11 +55,7 @@ function MovieList() {
         </div>
         <div className="col-2"></div>
       </div>
-      <button className="btn btn-primary" onClick={addMovie}>
-        Add Movie
-      </button>
     </>
   );
 }
-
-export default MovieList;
+export default Movies;
